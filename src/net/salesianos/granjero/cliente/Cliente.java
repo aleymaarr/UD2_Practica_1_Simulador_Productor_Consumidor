@@ -1,64 +1,61 @@
 package net.salesianos.granjero.cliente;
 
-public class Cliente  extends Thread {
+import net.salesianos.granjero.huerto.Huerto;
+import net.salesianos.granjero.utils.Utils;
 
+
+
+public class Cliente extends Thread {
+
+    private Huerto huerto;
     private int cantidadAConsumir;
+    private int tiempoConsumo;
 
-    private void iniciarConsumo(){
+    public Cliente(Huerto huerto, int cantidadAConsumir) {
+        this.huerto = huerto;
+        this.cantidadAConsumir = cantidadAConsumir;
+    }
 
-        while(cantidadAConsumir > 0){
+    public void run() {
+        iniciarConsumo();
+    }
 
-            if(huerto.verificarDisponibilidad){
-                String Verdura = seleccionarVerdura();
+    public void iniciarConsumo() {
+        while (cantidadAConsumir > 0) {
+            if (huerto.verificarDisponibilidad()) {
+                String verdura = seleccionarVerdura();
                 consumirVerdura(verdura);
-            }else{
+            } else {
                 esperarAbastecimiento();
             }
         }
+        finalizarConsumo();
     }
 
-    public String seleccionarVerdura() {
-        return huerto.obtenerVerdura();
+    private String seleccionarVerdura() {
+        String verdura = huerto.obtenerVerdura();
+        System.out.println("Cliente " + getId() + " ha seleccionado " + verdura);
+        return verdura;
     }
 
-    public void consumirVerdura(String verdura) {
-        disminuirInventario(verdura);
+    private void consumirVerdura(String verdura) {
+        System.out.println("Cliente " + getId() + " está consumiendo " + verdura);
+        tiempoConsumo = Utils.generarNumeroAleatorio(500, 2000);
+        Utils.espera(tiempoConsumo);
+        cantidadAConsumir--;
+        System.out.println("Cliente " + getId() + " ha terminado de consumir " + verdura);
         notificarGranjeros();
     }
 
-    private void esperarAbastecimiento(){
-        esperarHasta(() -> huerto.verificarDisponibilidad());
-    }
-
-    public void notificarGranjeros() {
+    private void notificarGranjeros() {
         huerto.notificacionEspacioDisponible();
     }
 
+    private void esperarAbastecimiento() {
+        Utils.esperaHasta(() -> huerto.verificarDisponibilidad());
+    }
+
     public void finalizarConsumo() {
-        terminarProceso();
+        System.out.println("Cliente " + getId() + " ha terminado de consumir.");
     }
-
-    private void disminuirInventario(String verdura) {
-
-    }
-
-    private void esperarHasta(BooleanSupplier condition) {
-        while (!condition.getAsBoolean()) {
-            esperar(1000);
-        }
-    }
-
-    private void esperar(int tiempo) {
-        try {
-            Thread.sleep(tiempo);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void terminarProceso() {
-
-    }
-
-
 }

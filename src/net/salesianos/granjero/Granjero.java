@@ -1,49 +1,77 @@
 package net.salesianos.granjero;
 
 import net.salesianos.granjero.huerto.Huerto;
+import net.salesianos.granjero.utils.Utils;
 
-public class Granjero extends Thread{
+public class Granjero extends Thread {
 
-    private static final int MAX_VERDURAS = 100;
+    private Huerto huerto;
     private String[] tiposDeVerduras;
     private String[] verdurasCrecidas;
-    private int  tiempoCrecimiento;
+    private int tiempoCrecimiento;
 
+    public Granjero(Huerto huerto) {
+        this.huerto = huerto;
+        this.tiposDeVerduras = new String[]{"lettuce", "cabbage", "onion", "spinach", "potato", "celery", "asparagus",
+                "radish", "broccoli", "artichoke", "tomato", "cucumber", "eggplant", "carrot", "green bean"};
+    }
 
-    public void IniciarPlatancion(){
-        int cantidad = calularCantidadVerduras();
+    @Override
+    public void run() {
+        IniciarPlantacion();
+    }
+
+    public void IniciarPlantacion() {
+        int cantidad = calcularCantidadVerduras();
         String[] tipos = seleccionarTiposVerduras(cantidad);
-        for (String tipo : tipos){
-             plantarVerdura(tipo);
+        for (String tipo : tipos) {
+            plantarVerdura(tipo);
         }
     }
 
-
-    public String SimularCrecimiento(String tipoVerdura){
-        tiempoCrecimiento = generarTiempoCrecimiento();
-        esperar(tiempoCrecimiento);
-        return obtenerVerdura(tipoVerdura);
+    private int calcularCantidadVerduras() {
+        return Utils.generarNumeroAleatorio(5, 10); // Simula la cantidad de verduras que plantará el granjero
     }
 
-    public void DepositarVerdurasEnRestaurante(){
-        if (huerto.espacioDisponible()){
-            huerto.añadirVerdura(verdurasCrecidas);
-            notificarClientes();
-        }else{
-            esperar();
+    private String[] seleccionarTiposVerduras(int cantidad) {
+        String[] tipos = new String[cantidad];
+        for (int i = 0; i < cantidad; i++) {
+            tipos[i] = tiposDeVerduras[Utils.generarNumeroAleatorio(0, tiposDeVerduras.length - 1)];
+        }
+        return tipos;
+    }
+
+    private void plantarVerdura(String tipo) {
+        System.out.println("Granjero " + getId() + " plantando " + tipo);
+        tiempoCrecimiento = Utils.generarNumeroAleatorio(1000, 5000);
+        Utils.espera(tiempoCrecimiento);
+        String verdura = SimularCrecimiento(tipo);
+        DepositarVerdurasEnRestaurante(verdura);
+    }
+¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬
+    public String SimularCrecimiento(String tipoVerdura) {
+        System.out.println("La verdura " + tipoVerdura + " ha crecido para el Granjero " + getId());
+        return tipoVerdura;
+    }
+
+    private void DepositarVerdurasEnRestaurante(String verdura) {
+        if (huerto.espacioDisponible()) {
+            huerto.añadirVerdura(verdura);
+            NotificarClientes();
+        } else {
+            Esperar();
         }
     }
 
-    public  void Esperar(){
-        esperarHasta(() -> huerto.espaciodisponible());
+    private void Esperar() {
+        Utils.esperaHasta(() -> huerto.espacioDisponible());
     }
 
-    public void notificarClientes() {
+    private void NotificarClientes() {
         huerto.notificarNuevaVerdura();
     }
 
-    public void terminarPlantacion() {
-        terminarProceso();
+    public void TerminarPlantacion() {
+        System.out.println("Granjero " + getId() + " ha terminado la plantación.");
     }
-
 }

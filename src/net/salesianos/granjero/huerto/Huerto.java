@@ -1,56 +1,55 @@
 package net.salesianos.granjero.huerto;
 
-import java.util.LinkedList;
+import java.util.Arrays;
 
 public class Huerto {
 
-    private LinkedList<String> Verduras;
-    private static  final int CAPACIDAD_MAXIMA = 100;
+    private String[] verduras;
+    private static final int CAPACIDAD_MAXIMA = 10;
 
     public Huerto() {
-        this.verduras = new LinkedList<>();
+        this.verduras = new String[CAPACIDAD_MAXIMA];
     }
 
-    public synchronized void añadirVerdura(String verdura){
-        if(verduras.size() < CAPACIDAD_MAXIMA) {
-            verduras.add(verdura);
+    public synchronized void añadirVerdura(String verdura) {
+        if (verduras.length < CAPACIDAD_MAXIMA) {
+            for (int i = 0; i < verduras.length; i++) {
+                if (verduras[i] == null) {
+                    verduras[i] = verdura;
+                    System.out.println("Huerto ha añadido " + verdura);
+                    break;
+                }
+            }
         }
     }
 
     public synchronized String obtenerVerdura() {
-        if (!verduras.isEmpty()) {
-            return verduras.remove();
+        String verdura = null;
+        for (int i = 0; i < verduras.length; i++) {
+            if (verduras[i] != null) {
+                verdura = verduras[i];
+                verduras[i] = null; // Marcar como consumido
+                System.out.println("Huerto ha entregado " + verdura);
+                break;
+            }
         }
-        return null;
+        return verdura;
     }
 
     public synchronized boolean verificarDisponibilidad() {
-        return verduras.size() < CAPACIDAD_MAXIMA;
+        return verduras.length > 0;
     }
 
     public synchronized void notificacionEspacioDisponible() {
-        notificarGranjerosSobreEspacio();
+        System.out.println("Huerto notifica espacio disponible.");
     }
 
     public synchronized void notificarNuevaVerdura() {
-        notificarClientesSobreNuevaVerdura();
+        System.out.println("Huerto notifica nueva verdura.");
     }
 
-    public synchronized String chequearEstadoHuerto() {
-        return estadoActualHuerto();
+    public synchronized void chequearEstadoHuerto() {
+        System.out.println("Estado actual del huerto: " + Arrays.toString(verduras));
     }
-
-    private void notificarGranjerosSobreEspacio() {
-
-    }
-
-    private void notificarClientesSobreNuevaVerdura() {
-
-    }
-
-    private String estadoActualHuerto() {
-        return "Estado actual del huerto";
-    }
-
 
 }
