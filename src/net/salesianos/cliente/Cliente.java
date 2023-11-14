@@ -1,15 +1,12 @@
-package net.salesianos.granjero.cliente;
+package net.salesianos.cliente;
 
-import net.salesianos.granjero.huerto.Huerto;
-import net.salesianos.granjero.utils.Utils;
-
-
+import net.salesianos.huerto.Huerto;
+import net.salesianos.utils.Utils;
 
 public class Cliente extends Thread {
 
     private Huerto huerto;
     private int cantidadAConsumir;
-    private int tiempoConsumo;
 
     public Cliente(Huerto huerto, int cantidadAConsumir) {
         this.huerto = huerto;
@@ -18,6 +15,10 @@ public class Cliente extends Thread {
 
     public void run() {
         iniciarConsumo();
+    }
+
+    private void esperarAbastecimiento() {
+        Utils.esperaHasta(() -> huerto.verificarDisponibilidad());
     }
 
     public void iniciarConsumo() {
@@ -40,7 +41,7 @@ public class Cliente extends Thread {
 
     private void consumirVerdura(String verdura) {
         System.out.println("Cliente " + getId() + " está consumiendo " + verdura);
-        tiempoConsumo = Utils.generarNumeroAleatorio(500, 2000);
+        int tiempoConsumo = Utils.generarNumeroAleatorio(500, 2000);
         Utils.espera(tiempoConsumo);
         cantidadAConsumir--;
         System.out.println("Cliente " + getId() + " ha terminado de consumir " + verdura);
@@ -51,11 +52,8 @@ public class Cliente extends Thread {
         huerto.notificacionEspacioDisponible();
     }
 
-    private void esperarAbastecimiento() {
-        Utils.esperaHasta(() -> huerto.verificarDisponibilidad());
-    }
 
-    public void finalizarConsumo() {
+    private void finalizarConsumo() {
         System.out.println("Cliente " + getId() + " ha terminado de consumir.");
     }
 }

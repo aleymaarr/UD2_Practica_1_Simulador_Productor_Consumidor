@@ -1,14 +1,10 @@
-package net.salesianos.granjero;
+package net.salesianos;
 
-import net.salesianos.granjero.cliente.Cliente;
-import net.salesianos.granjero.hilos.HilosClientes;
-import net.salesianos.granjero.hilos.HilosGranja;
-import net.salesianos.granjero.huerto.Huerto;
-import net.salesianos.granjero.restaurante.Restaurante;
-import net.salesianos.granjero.utils.Utils;
+import net.salesianos.hilos.HilosClientes;
+import net.salesianos.hilos.HilosGranja;
+import net.salesianos.huerto.Huerto;
 
 public class Main {
-
     private Huerto huerto;
     private HilosGranja granjeros;
     private HilosClientes clientes;
@@ -48,7 +44,6 @@ public class Main {
 
         return tiempoActual - tiempoInicial < 5000;
     }
-
 
     public void mostrarEstadoActual() {
         System.out.println("Estado actual de la simulación:");

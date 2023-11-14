@@ -1,14 +1,12 @@
 package net.salesianos.granjero;
 
-import net.salesianos.granjero.huerto.Huerto;
-import net.salesianos.granjero.utils.Utils;
+import net.salesianos.huerto.Huerto;
+import net.salesianos.utils.Utils;
 
 public class Granjero extends Thread {
 
     private Huerto huerto;
     private String[] tiposDeVerduras;
-    private String[] verdurasCrecidas;
-    private int tiempoCrecimiento;
 
     public Granjero(Huerto huerto) {
         this.huerto = huerto;
@@ -43,20 +41,14 @@ public class Granjero extends Thread {
 
     private void plantarVerdura(String tipo) {
         System.out.println("Granjero " + getId() + " plantando " + tipo);
-        tiempoCrecimiento = Utils.generarNumeroAleatorio(1000, 5000);
+        int tiempoCrecimiento = Utils.generarNumeroAleatorio(1000, 5000);
         Utils.espera(tiempoCrecimiento);
-        String verdura = simularCrecimiento(tipo);
-        depositarVerdurasEnRestaurante(verdura);
-    }
-¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬
-    public String simularCrecimiento(String tipoVerdura) {
-        System.out.println("La verdura " + tipoVerdura + " ha crecido para el Granjero " + getId());
-        return tipoVerdura;
+        depositarVerdurasEnRestaurante(tipo);
     }
 
     private void depositarVerdurasEnRestaurante(String verdura) {
         if (huerto.espacioDisponible()) {
-            huerto.añadirVerdura(verdura);
+            huerto.anadirVerdura(verdura);
             notificarClientes();
         } else {
             esperar();
@@ -64,14 +56,14 @@ public class Granjero extends Thread {
     }
 
     private void esperar() {
-        Utils.esperaHasta(() -> huerto.espacioDisponible());
+        Utils.espera(1000);
     }
 
     private void notificarClientes() {
         huerto.notificarNuevaVerdura();
     }
 
-    public void TerminarPlantacion() {
+    public void terminarPlantacion() {
         System.out.println("Granjero " + getId() + " ha terminado la plantación.");
     }
 }

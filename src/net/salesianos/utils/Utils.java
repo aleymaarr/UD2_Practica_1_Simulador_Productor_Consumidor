@@ -1,10 +1,10 @@
-package net.salesianos.granjero.utils;
+package net.salesianos.utils;
 
 import java.util.Random;
 
 public class Utils {
 
-    private  static final Random random = new Random();
+    private static final Random random = new Random();
 
     public static int generarNumeroAleatorio(int min, int max) {
         return random.nextInt(max - min + 1) + min;
@@ -23,15 +23,14 @@ public class Utils {
         }
     }
 
-    public static void registro(String evento) {
-        System.out.println("Registro: " + evento);
+    public static void esperaHasta(Condicion condicion) {
+        while (!condicion.seCumple()) {
+            espera(100);
+        }
     }
 
-    public static void configuracionInicial() {
-        establecerConfiguraciones();
+    public interface Condicion {
+        boolean seCumple();
     }
 
-    private static void establecerConfiguraciones() {
-        System.out.println("Configuraciones iniciales establecidas");
-    }
 }

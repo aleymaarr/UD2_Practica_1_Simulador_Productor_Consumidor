@@ -1,7 +1,7 @@
-package net.salesianos.granjero.restaurante;
+package net.salesianos.restaurante;
 
-import net.salesianos.granjero.huerto.Huerto;
-import net.salesianos.granjero.utils.Utils;
+import net.salesianos.huerto.Huerto;
+import net.salesianos.utils.Utils;
 
 public class Restaurante extends Thread {
 
@@ -13,30 +13,30 @@ public class Restaurante extends Thread {
 
     @Override
     public void run() {
-        MonitorizarSimulacion();
+        monitorizarSimulacion();
     }
 
-    public void MonitorizarSimulacion() {
+    public void monitorizarSimulacion() {
         while (true) {
             huerto.chequearEstadoHuerto();
             Utils.espera(1000);
         }
     }
 
-    public void FinalizarSimulacion() {
+    public void finalizarSimulacion() {
         System.out.println("Simulación finalizada.");
         interrupt();
     }
 
-    public void ManejoExcepciones() {
+    public void manejoExcepciones() {
         try {
-        } catch (ExcepcionEspecifica1 e) {
-            System.err.println("Manejo de ExcepcionEspecifica1: " + e.getMessage());
-        } catch (ExcepcionEspecifica2 e) {
-            System.err.println("Manejo de ExcepcionEspecifica2: " + e.getMessage());
+            int resultado = 10 / 0;
+        } catch (ArithmeticException e) {
+            System.err.println("Error aritmético: " + e.getMessage());
         } catch (Exception e) {
             System.err.println("Ocurrió una excepción: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
 }
