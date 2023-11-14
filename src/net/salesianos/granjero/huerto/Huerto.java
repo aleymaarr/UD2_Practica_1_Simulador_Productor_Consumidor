@@ -51,5 +51,4 @@ public class Huerto {
     public synchronized void chequearEstadoHuerto() {
         System.out.println("Estado actual del huerto: " + Arrays.toString(verduras));
     }
-
 }

@@ -18,10 +18,10 @@ public class Granjero extends Thread {
 
     @Override
     public void run() {
-        IniciarPlantacion();
+        iniciarPlantacion();
     }
 
-    public void IniciarPlantacion() {
+    public void iniciarPlantacion() {
         int cantidad = calcularCantidadVerduras();
         String[] tipos = seleccionarTiposVerduras(cantidad);
         for (String tipo : tipos) {
@@ -30,7 +30,7 @@ public class Granjero extends Thread {
     }
 
     private int calcularCantidadVerduras() {
-        return Utils.generarNumeroAleatorio(5, 10); // Simula la cantidad de verduras que plantará el granjero
+        return Utils.generarNumeroAleatorio(5, 10);
     }
 
     private String[] seleccionarTiposVerduras(int cantidad) {
@@ -45,29 +45,29 @@ public class Granjero extends Thread {
         System.out.println("Granjero " + getId() + " plantando " + tipo);
         tiempoCrecimiento = Utils.generarNumeroAleatorio(1000, 5000);
         Utils.espera(tiempoCrecimiento);
-        String verdura = SimularCrecimiento(tipo);
-        DepositarVerdurasEnRestaurante(verdura);
+        String verdura = simularCrecimiento(tipo);
+        depositarVerdurasEnRestaurante(verdura);
     }
 ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬
-    public String SimularCrecimiento(String tipoVerdura) {
+    public String simularCrecimiento(String tipoVerdura) {
         System.out.println("La verdura " + tipoVerdura + " ha crecido para el Granjero " + getId());
         return tipoVerdura;
     }
 
-    private void DepositarVerdurasEnRestaurante(String verdura) {
+    private void depositarVerdurasEnRestaurante(String verdura) {
         if (huerto.espacioDisponible()) {
             huerto.añadirVerdura(verdura);
-            NotificarClientes();
+            notificarClientes();
         } else {
-            Esperar();
+            esperar();
         }
     }
 
-    private void Esperar() {
+    private void esperar() {
         Utils.esperaHasta(() -> huerto.espacioDisponible());
     }
 
-    private void NotificarClientes() {
+    private void notificarClientes() {
         huerto.notificarNuevaVerdura();
     }
 

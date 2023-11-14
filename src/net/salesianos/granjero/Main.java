@@ -1,6 +1,8 @@
 package net.salesianos.granjero;
 
 import net.salesianos.granjero.cliente.Cliente;
+import net.salesianos.granjero.hilos.HilosClientes;
+import net.salesianos.granjero.hilos.HilosGranja;
 import net.salesianos.granjero.huerto.Huerto;
 import net.salesianos.granjero.restaurante.Restaurante;
 import net.salesianos.granjero.utils.Utils;

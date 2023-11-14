@@ -34,7 +34,4 @@ public class Utils {
     private static void establecerConfiguraciones() {
         System.out.println("Configuraciones iniciales establecidas");
     }
-
-
-
 }
